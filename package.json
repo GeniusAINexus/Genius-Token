@@ -8,7 +8,8 @@
   },
   "scripts": {
     "dev": "lite-server",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "deploy:testnet": "truffle migrate --f 2 --to 2  --network bscTestnet"
   },
   "author": "",
   "license": "ISC",
@@ -16,6 +17,10 @@
     "lite-server": "^2.3.0"
   },
   "dependencies": {
-    "openzeppelin-solidity": "^3.4.2"
+    "@openzeppelin/contracts": "^4.8.1",
+    "@truffle/hdwallet-provider": "^2.1.6",
+    "dotenv": "^16.0.3",
+    "openzeppelin-contracts": "^4.0.0",
+    "openzeppelin-solidity": "^4.8.1"
   }
 }
