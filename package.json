@@ -9,7 +9,8 @@
   "scripts": {
     "dev": "lite-server",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "deploy:testnet": "truffle migrate --f 2 --to 2  --network bscTestnet"
+    "deploy:testnet": "truffle migrate --f 2 --to 2  --network bscTestnet",
+    "verify:testnet": "truffle run verify Genius --network bscTestnet"
   },
   "author": "",
   "license": "ISC",

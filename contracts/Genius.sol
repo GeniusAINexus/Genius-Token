@@ -160,7 +160,7 @@ contract Genius is ReentrancyGuard, ERC20, AccessControl, Taxable  {
     function stake(uint256 amount) public {
         require(amount > 0, "Amount must be greater than 0");        
         
-        require(this.transfer(address(this), amount), "Token transfer failed");
+        require(transfer(address(this), amount), "Token transfer failed");
         claimEarnings();
 
         User storage user = users[msg.sender];
@@ -178,7 +178,7 @@ contract Genius is ReentrancyGuard, ERC20, AccessControl, Taxable  {
 
         user.stakedAmount -= amount;
         totalStakedAmount -= amount;
-        require(this.transfer(address(msg.sender), amount), "Token transfer failed");
+        _transfer(address(this), address(msg.sender), amount);
 
         emit Unstaked(msg.sender, amount);
     }
