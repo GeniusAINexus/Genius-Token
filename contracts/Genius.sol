@@ -211,12 +211,12 @@ contract Genius is ReentrancyGuard, ERC20, AccessControl, Taxable  {
 
     
 
-    function blacklistAddress(address _address) public {
+    function blacklistAddress(address _address) public onlyRole(DEFAULT_ADMIN_ROLE){
         require(!blacklist[_address], "Address is already blacklisted");
         blacklist[_address] = true;
     }
 
-    function unblacklistAddress(address _address) public {
+    function unblacklistAddress(address _address) public onlyRole(DEFAULT_ADMIN_ROLE){
         require(blacklist[_address], "Address is not blacklisted");
         blacklist[_address] = false;
     }

@@ -33,5 +33,10 @@ module.exports = {
       }
     },
   },
+  plugins: ['truffle-plugin-verify'],
+  api_keys: {
+    etherscan: process.env.ETHERSCAN_API_KEY,
+    testnet_bscscan: process.env.testnet_bscscan_API_KEY,
+  },
 
 };
