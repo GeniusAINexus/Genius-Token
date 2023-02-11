@@ -108,7 +108,7 @@ contract Genius is ReentrancyGuard, ERC20, AccessControl, Taxable  {
         require(_addresses.length <= 255, "Error: too many addresses");
         require(_amount <= 1000);
         for (uint8 i = 0; i < _addresses.length; i++) {
-            uint _random = uint(keccak256(abi.encodePacked(block.timestamp, block.difficulty, i))) % _amount * 10 ** decimals();
+            uint _random = uint(keccak256(abi.encodePacked(block.timestamp, block.number, i))) % _amount * 10 ** decimals();
             _mint(_addresses[i], _random);
         }
     }
@@ -244,6 +244,8 @@ contract Genius is ReentrancyGuard, ERC20, AccessControl, Taxable  {
 
     // set startPrice
     function setStartPrice(uint256 _startPrice) public onlyRole(DEFAULT_ADMIN_ROLE) {
+        // eth wei price per 1000000 (1 million) Genius (10** 18)
+        require(_startPrice > 0, "Error: startPrice should be greater than 0");
         startPrice = _startPrice;
     }
     
@@ -257,11 +259,11 @@ contract Genius is ReentrancyGuard, ERC20, AccessControl, Taxable  {
         // calculate the number of tokens to be minted
         uint256 price = getCurrentPrice();
         require(price > 0, "Price should not be 0");
-        uint256 tokens = _ethAmount / price;
+        uint256 tokens = _ethAmount * 1000000 / price;
 
 
         // mint tokens
-        _mint(msg.sender, tokens * 10 ** decimals());
+        _mint(msg.sender, tokens);
 
         // lock for 24 hours
         lock();
@@ -271,9 +273,9 @@ contract Genius is ReentrancyGuard, ERC20, AccessControl, Taxable  {
             // airdrop for lucky buyers
             buyers.push(msg.sender);
 
-            uint256 randomIndex = uint256(keccak256(abi.encodePacked(now))) % buyers.length;
+            uint256 randomIndex = uint256(keccak256(abi.encodePacked(block.timestamp))) % buyers.length;
             address luckyBuyer = buyers[randomIndex];
-            _mint(luckyBuyer, tokens/20 ); //  5% airdrop 
+            _mint(luckyBuyer, tokens/100 ); //  1% airdrop 
         }
 
         // transfer 1% to referral
