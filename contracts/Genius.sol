@@ -91,7 +91,7 @@ contract Genius is ReentrancyGuard, ERC20, AccessControl, Taxable  {
     {
         require(!blacklist[from], "Error: blacklist from");
         require(!blacklist[to], "Error: blacklist to");
-        require(!isLocked(from), "Error: address is locked ");
+        require(!isLocked(from), "Error: address is locked 24 hours after buying");
 
         if (hasRole(DEFAULT_ADMIN_ROLE, msg.sender)) {
             super._transfer(from, to, amount);
