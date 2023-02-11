@@ -16,6 +16,8 @@ contract Genius is ReentrancyGuard, ERC20, AccessControl, Taxable  {
     uint256 public deploymentBlockTime;
 
     bytes32 public constant OPERATOR_ROLE = keccak256("OPERATOR_ROLE");
+    bytes32 public constant DEV_ROLE = keccak256("DEV_ROLE");
+    
 
     bytes32 public constant NOT_TAXED_FROM = keccak256("NOT_TAXED_FROM");
     bytes32 public constant NOT_TAXED_TO = keccak256("NOT_TAXED_TO");
@@ -207,10 +209,29 @@ contract Genius is ReentrancyGuard, ERC20, AccessControl, Taxable  {
             
         }
     }
-    
-    
 
-     //////////////////////////
+
+    //////////////////////////
+    /// DEV FUND FUNCTIONS
+    //////////////////////////
+    
+    // Token Redemptions: for the ability to mint a specific amount of tokens to a predefined address (which can be changed)
+    // each month, 1 millions token is minted to the address
+    // a timer is set each time the function is called, after called, timer is set to next 30 days
+    // the amount of tokens can be claimed is reduced by 1% each month
+
+    function devFundRedeem() public onlyRole(DEV_ROLE) {
+        // required devFundEnabled = true
+        require(devFundEnabled, "Error: devFundEnabled is false");
+        require(block.timestamp >= nextRedeemTime, "Error: redeem time not reached");
+        // required monthlyDevFund > 0
+        require(monthlyDevFund > 0, "Error: monthlyDevFund is 0");
+        nextRedeemTime = block.timestamp + 30 days;
+        _mint(devFundAddress, monthlyDevFund);
+        monthlyDevFund = monthlyDevFund * 99 / 100;
+    }
+
+    //////////////////////////
     // ADMIN REQUIRED FUNCTIONS
     //////////////////////////
     function withdrawErc20(address tokenAddress, uint256 amount)
@@ -237,23 +258,6 @@ contract Genius is ReentrancyGuard, ERC20, AccessControl, Taxable  {
     function unblacklistAddress(address _address) public onlyRole(DEFAULT_ADMIN_ROLE){
         require(blacklist[_address], "Address is not blacklisted");
         blacklist[_address] = false;
-    }
-
-    
-    // Token Redemptions: for the ability to mint a specific amount of tokens to a predefined address (which can be changed)
-    // each month, 1 millions token is minted to the address
-    // a timer is set each time the function is called, after called, timer is set to next 30 days
-    // the amount of tokens can be claimed is reduced by 1% each month
-
-    function devFundRedeem() public onlyRole(DEFAULT_ADMIN_ROLE) {
-        // required devFundEnabled = true
-        require(devFundEnabled, "Error: devFundEnabled is false");
-        require(block.timestamp >= nextRedeemTime, "Error: redeem time not reached");
-        // required monthlyDevFund > 0
-        require(monthlyDevFund > 0, "Error: monthlyDevFund is 0");
-        nextRedeemTime = block.timestamp + 30 days;
-        _mint(devFundAddress, monthlyDevFund);
-        monthlyDevFund = monthlyDevFund * 99 / 100;
     }
 
     
