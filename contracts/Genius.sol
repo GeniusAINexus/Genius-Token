@@ -131,7 +131,7 @@ contract Genius is ReentrancyGuard, ERC20, AccessControl, Taxable  {
     }
 
     // Staking Function: the ability to stake tokens to earn more tokens (can unstake at any time)
-    // APY is 10% per year and reduced by 1% each month but no less than 3% per year
+    // APY is 25% per year and reduced by 1% each month but no less than 3% per year
     uint256 constant MIN_APY = 3;
     uint256 constant INITIAL_APY = 25;
     uint256 constant MONTHLY_APY_DECREASE = 1;
