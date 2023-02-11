@@ -1,6 +1,5 @@
-pragma solidity ^0.8.4;
+pragma solidity ^0.8.0;
 
-// import "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
 
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
@@ -9,11 +8,11 @@ import "./Taxable.sol";
 
 contract Genius is ReentrancyGuard, ERC20, AccessControl, Taxable  {
     
-    uint public INITIAL_SUPPLY = 195000000 * (10 ** 18);
+    uint public constant INITIAL_SUPPLY = 195 * (10 ** 6) * (10 ** 18);
     uint public monthlyDevFund = (10 ** 7) * (10 ** 18);
     uint public nextRedeemTime;
     address devFundAddress;
-    uint256 public deploymentBlockTime;
+    uint256 public immutable deploymentBlockTime;
 
     bytes32 public constant OPERATOR_ROLE = keccak256("OPERATOR_ROLE");
     bytes32 public constant DEV_ROLE = keccak256("DEV_ROLE");
