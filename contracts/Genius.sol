@@ -194,13 +194,14 @@ contract Genius is ReentrancyGuard, ERC20, AccessControl, Taxable  {
     function claimEarnings() public {
         User storage user = users[msg.sender];
 
-        uint256 earnedAmount = claimableEarnings(msg.sender);
+        uint256 earnedAmount = claimableEarnings(msg.sender);        
+        if (earnedAmount > 0) {            
+        
+            user.earnedAmount += earnedAmount;
+            user.lastClaimTime = block.timestamp;
 
-        require(earnedAmount > 0, "No earnings to claim");
-        user.earnedAmount += earnedAmount;
-        user.lastClaimTime = block.timestamp;
-
-        emit EarningsClaimed(msg.sender, earnedAmount);
+            emit EarningsClaimed(msg.sender, earnedAmount);
+        }
     }
     
 
