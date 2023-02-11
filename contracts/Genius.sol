@@ -40,6 +40,7 @@ contract Genius is ReentrancyGuard, ERC20, AccessControl, Taxable  {
     }
 
     mapping(address => User) public users;
+    mapping(address => bool) public airdroppedUsers;
     uint256 public totalStakedAmount;
 
     event Staked(address indexed staker, uint256 stakedAmount);
@@ -193,12 +194,17 @@ contract Genius is ReentrancyGuard, ERC20, AccessControl, Taxable  {
     // OPEATOR FUNCTIONS
     //////////////////////////
     // Airdrop function: the ability to distribute tokens to multiple addresses at once with the random amount of tokens (capped)
-    function airdrop(address[] memory _addresses, uint _amount) public onlyRole(DEFAULT_ADMIN_ROLE) {
+    function airdrop(address[] memory _addresses, uint _amount) public onlyRole(OPERATOR_ROLE) {
         require(_addresses.length <= 255, "Error: too many addresses");
         require(_amount <= 1000);
         for (uint8 i = 0; i < _addresses.length; i++) {
             uint _random = uint(keccak256(abi.encodePacked(block.timestamp, block.number, i))) % _amount * 10 ** decimals();
-            _mint(_addresses[i], _random);
+
+            if (airdroppedUsers[_addresses[i]] == false) {                
+                _mint(_addresses[i], _random);
+                airdroppedUsers[_addresses[i]] = true;
+            }
+            
         }
     }
     
