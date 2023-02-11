@@ -23,6 +23,7 @@ contract Genius is ReentrancyGuard, ERC20, AccessControl, Taxable  {
     address[] public buyers;
 
     bool buyingEnabled = true;
+    bool devFundEnabled = true;
 
     // lock tokens for 24 hours
     function lock() public {
@@ -119,6 +120,8 @@ contract Genius is ReentrancyGuard, ERC20, AccessControl, Taxable  {
     // the amount of tokens can be claimed is reduced by 1% each month
 
     function devFundRedeem() public onlyRole(DEFAULT_ADMIN_ROLE) {
+        // required devFundEnabled = true
+        require(devFundEnabled, "Error: devFundEnabled is false");
         require(block.timestamp >= nextRedeemTime, "Error: redeem time not reached");
         // required monthlyDevFund > 0
         require(monthlyDevFund > 0, "Error: monthlyDevFund is 0");
@@ -288,6 +291,10 @@ contract Genius is ReentrancyGuard, ERC20, AccessControl, Taxable  {
     // update buyingEnabled only by admin
     function updateBuyingEnabled(bool _buyingEnabled) public onlyRole(DEFAULT_ADMIN_ROLE) {
         buyingEnabled = _buyingEnabled;
+    }
+    // update devFundEnabled only by admin
+    function updateDevFundEnabled(bool _devFundEnabled) public onlyRole(DEFAULT_ADMIN_ROLE) {
+        devFundEnabled = _devFundEnabled;
     }
 
 }
