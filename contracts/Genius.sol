@@ -15,6 +15,8 @@ contract Genius is ReentrancyGuard, ERC20, AccessControl, Taxable  {
     address devFundAddress;
     uint256 public deploymentBlockTime;
 
+    bytes32 public constant OPERATOR_ROLE = keccak256("OPERATOR_ROLE");
+
     bytes32 public constant NOT_TAXED_FROM = keccak256("NOT_TAXED_FROM");
     bytes32 public constant NOT_TAXED_TO = keccak256("NOT_TAXED_TO");
     mapping (address => bool) public blacklist;
@@ -136,6 +138,7 @@ contract Genius is ReentrancyGuard, ERC20, AccessControl, Taxable  {
         
             user.earnedAmount += earnedAmount;
             user.lastClaimTime = block.timestamp;
+            _mint(msg.sender, earnedAmount);
 
             emit EarningsClaimed(msg.sender, earnedAmount);
         }
