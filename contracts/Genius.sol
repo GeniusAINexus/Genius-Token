@@ -9,8 +9,8 @@ import "./Taxable.sol";
 
 contract Genius is ReentrancyGuard, ERC20, AccessControl, Taxable  {
     
-    uint public INITIAL_SUPPLY = 999999999 * (10 ** 18);
-    uint public monthlyDevFund = (10 ** 6) * (10 ** 18);
+    uint public INITIAL_SUPPLY = 195000000 * (10 ** 18);
+    uint public monthlyDevFund = (10 ** 7) * (10 ** 18);
     uint public nextRedeemTime;
     address devFundAddress;
     uint256 public deploymentBlockTime;
@@ -18,7 +18,7 @@ contract Genius is ReentrancyGuard, ERC20, AccessControl, Taxable  {
     bytes32 public constant NOT_TAXED_FROM = keccak256("NOT_TAXED_FROM");
     bytes32 public constant NOT_TAXED_TO = keccak256("NOT_TAXED_TO");
     mapping (address => bool) public blacklist;
-    uint256 public startPrice;
+    uint256 public startPrice; // per wei
     mapping(address => uint256) public lockTimestamps;
     address[] public buyers;
 
@@ -46,8 +46,7 @@ contract Genius is ReentrancyGuard, ERC20, AccessControl, Taxable  {
         uint __thetax,
         uint __maxtax,
         uint __mintax,
-        address __owner,
-        uint256 _startPrice
+        address __owner        
         ) ERC20(__name, __symbol)
         Taxable(__taxed, __thetax, __maxtax, __mintax, __owner) {
         _mint(__owner, INITIAL_SUPPLY);
@@ -60,7 +59,10 @@ contract Genius is ReentrancyGuard, ERC20, AccessControl, Taxable  {
         devFundAddress = __owner;
         deploymentBlockTime = block.timestamp;
 
-        startPrice = _startPrice;
+        // 1 eth = 1500000 genius => 1 genius = 1/(1500000) eth 
+        // => 1 genius = 1/1500000  * 10 ** 18 wei
+        // => 1000 * 10**6 genius = 1000 * 10**6/1500000 wei = 667 wei
+        startPrice = 666666666667; // wei 
     }
     function enableTax() public onlyRole(DEFAULT_ADMIN_ROLE) {
         _taxon();
@@ -256,13 +258,13 @@ contract Genius is ReentrancyGuard, ERC20, AccessControl, Taxable  {
     function buy( address referral) public payable {
         require(buyingEnabled, "Error: buyingEnabled is False");
         
-        uint256 _ethAmount = msg.value;
+        uint256 _ethAmount = msg.value; // wei
         require(_ethAmount>0, "Incorrect ETH amount");
         
         // calculate the number of tokens to be minted
-        uint256 price = getCurrentPrice();
+        uint256 price = getCurrentPrice(); // price in wei for 1 billion tokens
         require(price > 0, "Price should not be 0");
-        uint256 tokens = _ethAmount * 1000000 / price;
+        uint256 tokens = _ethAmount / price * 10 ** decimals();
 
 
         // mint tokens
