@@ -21,7 +21,7 @@ module.exports = {
     nova: {
       provider: () => new HDWalletProvider(process.env.pk, `https://nova.arbitrum.io/rpc`),
       network_id: 42170,
-      confirmations: 3,
+      confirmations: 1,
       timeoutBlocks: 200,
       skipDryRun: true
     },
@@ -29,7 +29,7 @@ module.exports = {
   
   compilers: {
     solc: {
-      version: "^0.8.4", // Fetch exact version from solc-bin (default: truffle's version)
+      version: "0.8.2", // Fetch exact version from solc-bin (default: truffle's version)
       // docker: true,        // Use "0.5.1" you've installed locally with docker (default: false)
       settings: {          // See the solidity docs for advice about optimization and evmVersion
        optimizer: {
@@ -40,7 +40,7 @@ module.exports = {
       }
     },
   },
-  plugins: ['truffle-plugin-verify'],
+  plugins: ['truffle-plugin-verify',   'truffle-plugin-stdjsonin'],
   api_keys: {
     etherscan: process.env.ETHERSCAN_API_KEY,
     testnet_bscscan: process.env.testnet_bscscan_API_KEY,

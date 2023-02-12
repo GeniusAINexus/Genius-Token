@@ -12,12 +12,13 @@
     "deploy:testnet": "truffle migrate --f 2 --to 2  --network bscTestnet",
     "deploy:mainnet": "truffle migrate --f 2 --to 2  --network nova",
     "verify:testnet": "truffle run verify Genius --network bscTestnet",
-    "verify:mainnet": "truffle run verify Genius --network nova"
+    "verify:mainnet": "truffle run verify Genius@0xbEEe680074aa958780Db68b1fb47f82746Fa069a --network nova --verifiers=etherscan"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "lite-server": "^2.3.0",
+    "truffle-plugin-stdjsonin": "github:mhrsalehi/truffle-plugin-stdjsonin",
     "truffle-plugin-verify": "^0.6.1"
   },
   "dependencies": {
