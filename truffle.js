@@ -18,6 +18,13 @@ module.exports = {
       timeoutBlocks: 200,
       skipDryRun: true
     },
+    nova: {
+      provider: () => new HDWalletProvider(process.env.pk, `https://nova.arbitrum.io/rpc`),
+      network_id: 42170,
+      confirmations: 3,
+      timeoutBlocks: 200,
+      skipDryRun: true
+    },
   },
   
   compilers: {
