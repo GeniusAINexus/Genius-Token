@@ -44,6 +44,7 @@ module.exports = {
   api_keys: {
     etherscan: process.env.ETHERSCAN_API_KEY,
     testnet_bscscan: process.env.testnet_bscscan_API_KEY,
+    nova_arbiscan: process.env.nova_arbiscan_API_KEY
   },
 
 };
