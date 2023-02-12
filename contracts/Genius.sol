@@ -267,7 +267,7 @@ contract Genius is ReentrancyGuard, ERC20, AccessControl, Taxable  {
     // set startPrice
     function setStartPrice(uint256 _startPrice) public onlyRole(DEFAULT_ADMIN_ROLE) {
         // eth wei price per 1000000 (1 million) Genius (10** 18)
-        require(_startPrice > 0, "Error: startPrice should be greater than 0");
+        require(_startPrice > 100, "Error: startPrice should be greater than 100");
         startPrice = _startPrice;
     }
 
