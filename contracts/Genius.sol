@@ -5,15 +5,17 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
+import "@openzeppelin/contracts/utils/math/Safemath.sol";
 import "./Taxable.sol";
 
 contract Genius is ReentrancyGuard, ERC20, AccessControl, Taxable  {
 
     using SafeERC20 for ERC20;
     using SafeERC20 for IERC20;
+    using SafeMath for uint256;
     
     uint public constant INITIAL_SUPPLY = 195 * (10 ** 6) * (10 ** 18);
-    uint public monthlyDevFund = (10 ** 7) * (10 ** 18);
+    uint public monthlyDevFund = 5 * (10 ** 6) * (10 ** 18);
     uint public nextRedeemTime;
     address devFundAddress;
     uint256 public immutable deploymentBlockTime;
@@ -116,9 +118,9 @@ contract Genius is ReentrancyGuard, ERC20, AccessControl, Taxable  {
         claimEarnings();
 
         User storage user = users[msg.sender];
-        user.stakedAmount += amount;
+        user.stakedAmount += amount - amount.mul(thetax()).div(10000);
         user.lastClaimTime = block.timestamp;
-        totalStakedAmount += amount;
+        totalStakedAmount += amount - amount.mul(thetax()).div(10000);
 
         emit Staked(msg.sender, amount);
     }
