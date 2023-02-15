@@ -17,7 +17,7 @@ contract Genius is ReentrancyGuard, ERC20, AccessControl, Taxable  {
     uint public constant INITIAL_SUPPLY = 195 * (10 ** 6) * (10 ** 18);
     uint public monthlyDevFund = 5 * (10 ** 6) * (10 ** 18);
     uint public nextRedeemTime;
-    address devFundAddress;
+    address public devFundAddress;
     uint256 public immutable deploymentBlockTime;
 
     bytes32 public constant OPERATOR_ROLE = keccak256("OPERATOR_ROLE");
