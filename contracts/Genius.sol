@@ -31,8 +31,9 @@ contract Genius is ReentrancyGuard, ERC20, AccessControl, Taxable  {
     mapping(address => uint256) public lockTimestamps;
     address[] public buyers;
 
-    bool buyingEnabled = true;
-    bool devFundEnabled = true;
+    bool public buyingEnabled = true;
+    bool public stakingEnabled = true;
+    bool public devFundEnabled = true;
 
     // Staking Function: the ability to stake tokens to earn more tokens (can unstake at any time)
     // APY is 25% per year and reduced by 1% each month but no less than 3% per year
@@ -112,7 +113,8 @@ contract Genius is ReentrancyGuard, ERC20, AccessControl, Taxable  {
     
 
     function stake(uint256 amount) public {
-        require(amount > 0, "Amount must be greater than 0");        
+        require(amount > 0, "Amount must be greater than 0");    
+        require(stakingEnabled, "Staking is disabled");    
         
         require(transfer(address(this), amount), "Token transfer failed");
         claimEarnings();
@@ -280,6 +282,10 @@ contract Genius is ReentrancyGuard, ERC20, AccessControl, Taxable  {
     // update devFundEnabled only by admin
     function updateDevFundEnabled(bool _devFundEnabled) public onlyRole(DEFAULT_ADMIN_ROLE) {
         devFundEnabled = _devFundEnabled;
+    }
+    // update stakingEnabled
+    function updateStakingEnabled(bool _stakingEnabled) public onlyRole(DEFAULT_ADMIN_ROLE) {
+        stakingEnabled = _stakingEnabled;
     }
 
     function enableTax() public onlyRole(DEFAULT_ADMIN_ROLE) {

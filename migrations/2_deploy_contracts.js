@@ -3,7 +3,7 @@ var Genius = artifacts.require("Genius");
 module.exports = function(deployer) {
   // deploy Genius with 7 parameters
   deployer.deploy(Genius, 
-      "Genius AI", 
+      "AI Nexus", 
       "GENIUS", 
       true,
       25, 
